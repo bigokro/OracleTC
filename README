@@ -1,0 +1,24 @@
+OracleTC: Test Coverage Reporting for Oracle 10g
+================================================
+
+OracleTC is a project created by Timothy High (https://github.com/bigokro) and Eduardo Morelli, while working for Sakonnet Technology (http://www.sknt.com/). 
+
+For more background on this project, check out the blog post: http://timhigh.wordpress.com/2009/02/17/test-coverage-reporting-on-oracle-10g/
+
+The project is being released for public consumption based on popular demand with the official blessing of Sakonnet. I have done my best to "sanitize" the library here so as not to reveal any of the innards of Xenon itself, but hopefully have not hidden any information that would be useful for getting your own version up and running.
+
+Note that this project was never designed to work for the general case. It was written very specifically for the Xenon code base. However, the techniques used are applicable in general, and with a little elbow grease, it should be possible to measure test coverage of any PL/SQL library.
+
+If anyone wishes to improve the harness, and in particular, make it more turnkey, please do clone the repository and let us know!
+
+BRIEF NOTES ON PROJECT FILES
+----------------------------
+PLSQL_Profiling.docx - An overview of the project. It was written for internal use, for people familiar with the project. (i.e. it's cryptic...)
+Oracle_TC.sql - Script for setting up coverage reports
+oracletc-dist - Folder with configs for a Maven build to transform test results into coverage reports
+  src
+    main
+	  scripts
+	    sql - Sample SQL files used for running the tests and outputting the coverage reports
+		  v1 - The set of scripts for a specific run of the tests (wrapper scripts may change from version to version)
+oracletc - The Java project for building and running the test coverage (ant tasks)

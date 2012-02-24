@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="oracle-test-coverage" default="coverage" basedir=".">
+
+	<property name="input.dir" value="xml"/>
+	<property name="output.dir" value="html"/>
+	<property name="build.dir" value="${basedir}"/>
+
+	<path id="oracletcClasspath">
+		<fileset dir="${build.dir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="coverage" depends="clean, transform, generateIndex">
+	</target>
+
+	<target name="transform">
+	    <!-- Ignore "wrapper" and test coverage framework packages -->
+		<xslt basedir="${input.dir}" destdir="${output.dir}" extension=".html" style="oracle-test-coverage.xsl" includes="*.xml" excludes="WRP_*.xml, T_*.xml, PRC_EXPORT_CLOB.xml"/>
+	    <!-- Ignore TYPE declarations; we only care about triggers -->
+		<xslt basedir="${input.dir}" destdir="${output.dir}" extension=".html" style="oracle-test-coverage.xsl" includes="T_*.xml">
+  		  <contains text="trigger" casesensitive="no"/>
+		</xslt>
+		<mkdir dir="${output.dir}/css"/>
+		<copy todir="${output.dir}/css">
+			<fileset dir="${build.dir}/css"/>
+		</copy>
+		<mkdir dir="${output.dir}/images"/>
+		<copy todir="${output.dir}/images">
+			<fileset dir="${build.dir}/images"/>
+		</copy>
+	</target>
+
+	<target name="generateIndex">
+		<!--java classname="com.sknt.oracletc.IndexHtmlFileGenerator">
+         <arg value="${output.dir}"/>
+         <classpath>
+           <pathelement location="${build.dir}/oracletc/target/classes"/>
+         </classpath>
+       </java-->
+		<taskdef name="generateOracleTCIndex" classpathref="oracletcClasspath" classname="com.sknt.oracletc.ant.GenerateOracleTCIndexTask"/>
+		<generateOracleTCIndex 
+			srcdir="${output.dir}" 
+			destfile="${output.dir}/index.html" 
+			bestfile="${output.dir}/index-best.html"
+			groups="PKG_MKT_GET_MAT_ADHOC_, PKG_MKT_GET_VAL_, PKG_MKT_GET_PRECALC_VAL_, PKG_MKT_VAR_, PKG_VAL_SCALE_"
+			/>
+	</target>
+
+	<target name="clean" description="Remove all files created by the build process.">
+		<delete dir="${output.dir}"/>
+	</target>
+
+</project>
